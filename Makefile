@@ -1,3 +1,5 @@
+rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
+
 NAME	:= B2
 
 PWD		:= $(CURDIR)
@@ -12,22 +14,22 @@ CFLG	:=	-g				\
 			-isystem ./src	\
 			-Wattributes
 
-CSRC	:= $(shell find $(SRC) -name "*.c")
+CSRC	:= $(call rwildcard,$(SRC),*.c)
 CTAR	:= $(patsubst $(SRC)/%,$(BIN)/%,$(patsubst %.c,%.out,$(CSRC)))
-CIDR	:= $(shell dirname $(shell echo $(CSRC) | tr ' ' '\n' | sort -u | xargs))
-CINC	:= $(addprefix -I ,$(CIDR))
+# CIDR	:= $(shell dirname $(shell echo $(CSRC) | tr ' ' '\n' | sort -u | xargs))
+CINC	:= $(addprefix -I ,$(CSRC))
 
 export
 
 ifeq ($(OS),Windows_NT)
 	## Windows Logic
-	OUTPUT += .exe
+	OUTPUT := $(OUTPUT).exe
 	CLEAR += cls
 else
 	UNAME=$(shell uname -s)
 	ifeq ($(UNAME),Linux)
 		## Linux logic
-		CLEAR += clear
+		CLEAR+=clear
 	endif
 	ifeq ($(UNAME),Darwin)
 		## OSX logic
@@ -41,4 +43,5 @@ build:
 	@$(CC) $(CFLG) $(CSRC) -o $(OUTPUT) $(CINC)
 
 run:
+	@$(CLEAR)
 	@$(OUTPUT)

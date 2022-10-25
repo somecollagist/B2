@@ -29,8 +29,9 @@ B2 depends on the following programs:
 - make
 
 ### Windows
-- Install the [Chocolately](https://chocolatey.org/install) package manager for Windows. (Just follow their instructions because they work.)
-- Navigate to the `setup` directory and run `./setup-windows.cmd`.
+- Open Powershell.
+- Run `Set-ExecutionPolicy Bypass -Scope Process`. This allows local `.ps1` files to be run.
+- Navigate to the `setup` directory and run `./setup-windows.ps1`.
 ### Linux
 Navigate to the `setup` directory and run `./setup-distro.sh`, replacing `distro` with whatever base distribution your linux machine runs on.
 
